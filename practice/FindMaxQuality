@@ -1,0 +1,37 @@
+ublic static long findMaximumQuality(List<Integer> packets, int channels) {
+    int n = packets.size();
+    
+    if (channels == 1) {
+        long result = 0;
+        for (int packet : packets) {
+            result += packet;
+        }
+        return result;
+    }
+    
+    List<Integer> packetsSorted = new ArrayList<>(packets);
+    packetsSorted.sort(Collections.reverseOrder());
+
+    // Calculate the result
+    long result = 0;
+    for (int i = 0; i < channels - 1; i++) {
+        result += packetsSorted.get(i);
+    }
+    
+    List<Integer> medianTemp = packetsSorted.subList(channels - 1, packetsSorted.size());
+    
+    double temp;
+    if (medianTemp.size() % 2 == 0) {
+        int mid1 = medianTemp.size() / 2;
+        int mid2 = mid1 - 1;
+        temp = (medianTemp.get(mid1) + medianTemp.get(mid2)) / 2.0;
+    } else {
+        int mid = medianTemp.size() / 2;
+        temp = medianTemp.get(mid);
+    }
+
+    // Add the median to the result
+    result += Math.ceil(temp);
+
+    return result;
+}
