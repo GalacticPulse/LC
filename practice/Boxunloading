@@ -1,0 +1,49 @@
+import java.util.Arrays;
+
+public class BoxUnloading {
+
+    // Method to calculate minimum boxes to unload
+    public static int minBoxesToUnload(int[] array, int capacity) {
+        // Step 1: Sort the array
+        Arrays.sort(array);
+        
+        // Find min and max in the sorted array
+        int min = array[0];
+        int max = array[array.length - 1];
+        
+        // Calculate the limit based on capacity * min
+        int limit = capacity * min;
+        
+        // If the condition is already satisfied, return 0
+        if (max <= limit) {
+            return 0;
+        }
+
+        // Step 2: Unload boxes (start unloading from the maximum values)
+        int unloadedBoxes = 0;
+        int n = array.length;
+
+        for (int i = n - 1; i >= 0; i--) {
+            // Unload the current heaviest box
+            unloadedBoxes++;
+            max = array[i - 1];  // Update max after unloading
+            
+            // Check if the condition is now satisfied
+            if (max <= limit) {
+                break;
+            }
+        }
+
+        return unloadedBoxes;
+    }
+
+    public static void main(String[] args) {
+        // Example input
+        int[] array = {1, 4, 3, 2};
+        int capacity = 2;
+
+        // Calculate and print the result
+        int result = minBoxesToUnload(array, capacity);
+        System.out.println("Minimum number of boxes to be unloaded: " + result);
+    }
+}
