@@ -1,0 +1,48 @@
+public class MinimumSegSize {
+
+    public static int findMinSegSize(int[] arr) {
+        int n = arr.length;
+
+        // Try different segment sizes starting from 1
+        for (int segSize = 1; segSize <= n; segSize++) {
+            if (canProcessArray(arr, segSize)) {
+                return segSize; // Return the first valid segment size
+            }
+        }
+
+        // If no segment size works, return -1
+        return -1;
+    }
+
+    // Helper function to check if a given segment size can process the array
+    private static boolean canProcessArray(int[] arr, int segSize) {
+        int n = arr.length;
+        int p1 = 0, p2 = 1;
+
+        while (p1 < n) {
+            // p2 starts from p1 + 1
+            p2 = p1 + 1;
+            // Compare arr[p1] with elements in the subarray starting from p2
+            for (int i = 0; i < segSize && p2 < n; i++, p2++) {
+                if (arr[p1] < arr[p2]) {
+                    return false; // arr[p1] is not greater than all elements in subarray
+                }
+            }
+
+            // Move p1 by 1 and p2 forward by segSize
+            P1++;
+		p2+= sigSize;
+        }
+
+        return true; // The array can be processed with this segment size
+    }
+
+    public static void main(String[] args) {
+        // Test cases
+        int[] arr1 = {3, 2, 1, 4, 6, 5};
+        System.out.println(findMinSegSize(arr1)); // Example output: 2
+
+        int[] arr2 = {1, 2, 3, 4, 5};
+        System.out.println(findMinSegSize(arr2)); // Example output: -1 (no valid segSize)
+    }
+}
