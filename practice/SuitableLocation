@@ -54,3 +54,66 @@ public static int suitableLocations(List<Integer> center, long d) {
         }
         return true;
     }
+
+/*
+import java.util.*;
+
+public class BinarySearchRange {
+    // Helper function that checks if the sum of absolute differences is less than or equal to d
+    public static boolean cal(int[] arr, int d, int x) {
+        int sum = 0;
+        for (int i : arr) {
+            sum += Math.abs(x - i);
+        }
+        return sum <= d;
+    }
+
+    // Main function to find the range
+    public static int findRange(int[] arr, int n, int d) {
+        // Binary search to find minx
+        int l1 = (int) -1e9, h1 = arr[n - 1] - d;
+        int minx = h1;
+        while (l1 <= h1) {
+            int m = (l1 + h1) / 2;
+            if (cal(arr, d, m)) {
+                minx = m;
+                h1 = m - 1;
+            } else {
+                l1 = m + 1;
+            }
+        }
+
+        // Binary search to find maxx
+        l1 = arr[0] + d;
+        h1 = (int) 1e9;
+        int maxx = l1;
+        while (l1 <= h1) {
+            int m = (l1 + h1) / 2;
+            if (cal(arr, d, m)) {
+                maxx = m;
+                l1 = m + 1;
+            } else {
+                h1 = m - 1;
+            }
+        }
+
+        // If the range is invalid, return 0
+        if (maxx < minx) {
+            return 0;
+        }
+
+        // Return the length of the range
+        return maxx - minx + 1;
+    }
+
+    public static void main(String[] args) {
+        // Example usage
+        int[] arr = {1, 3, 5, 7};  // Example array
+        int n = arr.length;
+        int d = 10;  // Example value of d
+
+        int result = findRange(arr, n, d);
+        System.out.println("Result: " + result);  // Output the result
+    }
+}
+*/
