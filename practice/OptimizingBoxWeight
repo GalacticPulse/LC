@@ -1,0 +1,55 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class PackingBoxes {
+
+    public static List<Integer> findSubsetA(int[] arr) {
+        // Sort the array in descending order
+        Arrays.sort(arr);
+        int totalSum = 0;
+        for (int num : arr) {
+            totalSum += num;
+        }
+
+        List<Integer> subsetA = new ArrayList<>();
+        int subsetASum = 0;
+        int subsetBSum = totalSum;
+
+        // Traverse from largest to smallest and fill subset A
+        for (int i = arr.length - 1; i >= 0; i--) {
+            subsetA.add(arr[i]);
+            subsetASum += arr[i];
+            subsetBSum -= arr[i];
+
+            // Stop when sum of A is greater than sum of B
+            if (subsetASum > subsetBSum) {
+                break;
+            }
+        }
+
+        return subsetA;
+    }
+
+    public static void main(String[] args) {
+        // Example 1
+        int[] arr1 = {3, 7, 5, 6, 2};
+        System.out.println("Subset A: " + findSubsetA(arr1));  // Output: [7, 6]
+
+        // Example 2
+        int[] arr2 = {4, 5, 2, 3, 1, 2};
+        System.out.println("Subset A: " + findSubsetA(arr2));  // Output: [5, 4]
+
+        // Example 3
+        int[] arr3 = {1, 2, 2, 2, 3, 4};
+        System.out.println("Subset A: " + findSubsetA(arr3));  // Output: [4, 3, 1]
+
+        // Example 4
+        int[] arr4 = {2, 2, 2, 3};
+        System.out.println("Subset A: " + findSubsetA(arr4));  // Output: [3, 2]
+
+        // Example 5
+        int[] arr5 = {1, 1, 1, 1, 4, 4, 4, 7, 8};
+        System.out.println("Subset A: " + findSubsetA(arr5));  // Output: [8, 4, 4, 4]
+    }
+}
