@@ -1,0 +1,45 @@
+import java.util.*;
+
+public class AnalyticsTaskScheduler {
+    public static int getMaximumTasks(int limit, int[] primary, int[] secondary) {
+        int n = primary.length;
+        int[] remainingTime = new int[n];
+        
+        // Calculate remaining time for each day after scheduling primary tasks
+        for (int i = 0; i < n; i++) {
+            remainingTime[i] = limit - primary[i];
+        }
+        
+        // Sort secondary tasks in descending order
+        Integer[] secondaryIndices = new Integer[n];
+        for (int i = 0; i < n; i++) {
+            secondaryIndices[i] = i;
+        }
+        Arrays.sort(secondaryIndices, (a, b) -> secondary[b] - secondary[a]);
+        
+        // Sort remaining time in ascending order
+        Arrays.sort(remainingTime);
+        
+        int maxSecondaryTasks = 0;
+        int timeIndex = 0;
+        
+        // Schedule secondary tasks
+        for (int i = 0; i < n && timeIndex < n; i++) {
+            if (secondary[secondaryIndices[i]] <= remainingTime[timeIndex]) {
+                maxSecondaryTasks++;
+                timeIndex++;
+            }
+        }
+        
+        return maxSecondaryTasks;
+    }
+
+    public static void main(String[] args) {
+        int limit = 7;
+        int[] primary = {4, 5, 2, 4};
+        int[] secondary = {5, 6, 3, 4};
+        
+        int result = getMaximumTasks(limit, primary, secondary);
+        System.out.println("Maximum number of secondary tasks that can be scheduled: " + result);
+    }
+}
