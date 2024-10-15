@@ -1,0 +1,46 @@
+import java.util.HashMap;
+
+public class PerfectAnagram {
+
+    // Function to find the longest perfect anagram
+    public static int longestPerfectAnagram(String s) {
+        int n = s.length();
+        int maxLen = 0;
+
+        // Iterate over all possible substring lengths
+        for (int len = 1; len < n; len++) {
+            HashMap<String, Integer> map = new HashMap<>();
+            
+            // Check all substrings of length len
+            for (int i = 0; i <= n - len; i++) {
+                String sub = s.substring(i, i + len);
+                String sortedSub = sortString(sub);
+                
+                // If the sorted substring is already in the map and the indices are different
+                if (map.containsKey(sortedSub)) {
+                    maxLen = len;
+                } else {
+                    map.put(sortedSub, i);  // Store the first occurrence of this anagram
+                }
+            }
+        }
+
+        return maxLen;
+    }
+
+    // Helper function to sort a string
+    private static String sortString(String s) {
+        char[] chars = s.toCharArray();
+        java.util.Arrays.sort(chars);
+        return new String(chars);
+    }
+
+    public static void main(String[] args) {
+        // Example input
+        String s = "cabcab";
+
+        // Find and print the longest perfect anagram
+        int result = longestPerfectAnagram(s);
+        System.out.println("The length of the longest perfect anagram is: " + result);
+    }
+}
