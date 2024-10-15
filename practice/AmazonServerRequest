@@ -1,0 +1,45 @@
+import java.util.*;
+
+public class ServerRequestQueue {
+
+    public static void main(String[] args) {
+        int[] wait = {3, 1, 2, 1};
+        List<Integer> result = processRequests(wait);
+        System.out.println(result); // Expected output: [4, 2, 1, 0]
+    }
+
+    public static List<Integer> processRequests(int[] wait) {
+        int n = wait.length;
+        List<Integer> result = new ArrayList<>();
+        Queue<Integer> queue = new LinkedList<>(); // FIFO queue for processing order
+        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a, b) -> a[0] - b[0]); // Min-heap for expiration times
+
+        // Initialize the processing queue and min-heap
+        for (int i = 0; i < n; i++) {
+            queue.offer(i); // Queue to track processing order (index-based)
+            minHeap.offer(new int[]{wait[i], i}); // Min-heap to track expiration times [wait_time, index]
+        }
+
+        int time = 0;
+
+        while (!queue.isEmpty()) {
+            // Count how many requests are in the queue at the current time
+            result.add(queue.size());
+
+            // Process the front request in the queue
+            int currentRequest = queue.poll();
+
+            // Increment time after processing
+            time++;
+
+            // Remove expired requests from both the heap and queue
+            // We remove all requests whose expiration time <= current time
+            while (!minHeap.isEmpty() && minHeap.peek()[0] <= time) {
+                int[] expiredRequest = minHeap.poll();
+                queue.remove(expiredRequest[1]); // Remove from queue by index
+            }
+        }
+
+        return result;
+    }
+}
