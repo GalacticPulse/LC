@@ -1,0 +1,40 @@
+public static List<String> canRearrange(String binary, String[] arr) {
+    // Step 1: Count '0's and '1's in the binary string
+    int countZeroBinary = 0, countOneBinary = 0;
+    for (char c : binary.toCharArray()) {
+        if (c == '0') countZeroBinary++;
+        else if (c == '1') countOneBinary++;
+    }
+
+    List<String> result = new ArrayList<>();
+
+    // Step 2: Process each string in arr
+    for (String target : arr) {
+        int countZeroTarget = 0, countOneTarget = 0;
+
+        // Count '0's and '1's in the target string, and replace '?' with either '0' or '1'
+        for (char c : target.toCharArray()) {
+            if (c == '0') countZeroTarget++;
+            else if (c == '1') countOneTarget++;
+            else if (c == '?') {
+                // Decide later, '?' can be either '0' or '1'
+                // This is a wild card, so we need to consider what '?' should be based on the counts.
+            }
+        }
+
+        // Calculate remaining '?' and try to match the counts
+        int remainingZeros = countZeroBinary - countZeroTarget;
+        int remainingOnes = countOneBinary - countOneTarget;
+        int remainingWildcards = target.length() - countZeroTarget - countOneTarget;
+
+        // Check if remaining '?' can be balanced between '0' and '1'
+        if (remainingZeros >= 0 && remainingOnes >= 0 && remainingZeros + remainingOnes == remainingWildcards) {
+            result.add("YES");
+        } else {
+            result.add("NO");
+        }
+    }
+
+    return result;
+}
+
