@@ -1,0 +1,30 @@
+class Solution {
+    public static String solve(String s) {
+        int len = s.length();
+        int[] freq = new int[26];
+        for (int i = 0; i < len / 2; i++)
+            freq[s.charAt(i) - 'a']++;
+        
+        StringBuilder result = new StringBuilder(s);
+        int pos = 0;
+        for (int i = 0; i < 26; i++) {
+            char c = (char)(i + 'a');
+            for (int j = 0; j < freq[i]; j++) {
+                result.setCharAt(pos, c);
+                result.setCharAt(len - pos - 1, c);
+                pos++;
+            }
+        }
+        return result.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(solve("a"));      // a
+        System.out.println(solve("aa"));     // aa
+        System.out.println(solve("aaa"));    // aaa
+        System.out.println(solve("bab"));    // bab
+        System.out.println(solve("baab"));   // abba
+        System.out.println(solve("babab"));  // abbba
+        System.out.println(solve("baabaab")); // aabbbaa
+    }
+}
