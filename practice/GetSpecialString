@@ -1,0 +1,44 @@
+public class SpecialStringGenerator {
+
+    public static String getSpecialString(int n, String s) {
+        char[] result = s.toCharArray();
+        boolean found = false;
+
+        // Step 1: Try to create a string greater than s
+        for (int i = n - 1; i >= 0; i--) {
+            if (result[i] < 'z') {
+                result[i]++;  // Increment the current character
+                found = true;
+                break; // We can break once we increment
+            }
+        }
+
+        // If we couldn't find a place to increment, it means all characters were 'z'
+        if (!found) {
+            return ""; // or throw an exception based on requirements
+        }
+
+        // Step 2: Make sure the result is special (no adjacent characters are the same)
+        for (int i = 0; i < n; i++) {
+            // Ensure no adjacent characters are the same
+            while (i > 0 && result[i] == result[i - 1]) {
+                result[i]++;
+                // If we hit 'z', we must stop incrementing
+                if (result[i] > 'z') {
+                    return ""; // or throw an exception based on requirements
+                }
+            }
+        }
+
+        // Step 3: Return the resultant string as a new String
+        return new String(result);
+    }
+
+    public static void main(String[] args) {
+        String s1 = "abbd";
+        System.out.println(getSpecialString(s1.length(), s1)); // Output: abca
+
+        String s2 = "zzzz";
+        System.out.println(getSpecialString(s2.length(), s2)); // Output: ""
+    }
+}
