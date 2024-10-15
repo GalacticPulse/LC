@@ -1,48 +1,23 @@
-import java.util.*;
+import java.util.Arrays;
 
 class Solution {
-    public int maxLastElement(int[] arr) {
-        int n = arr.length;
-        if (n == 1) return arr[0];
-        
-        // dp[i][j] stores the maximum possible value after operations on subarray arr[i..j]
-        int[][] dp = new int[n][n];
-        
-        // Initialize dp with single elements
+    public static int solve(int[] a) {
+        int n = a.length;
+        int mx = a[0], sumEven = 0, sumOdd = 0;
         for (int i = 0; i < n; i++) {
-            dp[i][i] = arr[i];
+            mx = Math.max(mx, a[i]);
+            if (i % 2 == 0)
+                sumEven += Math.max(a[i], 0);
+            else
+                sumOdd += Math.max(a[i], 0);
         }
-        
-        // Fill dp table
-        for (int len = 2; len <= n; len++) {
-            for (int i = 0; i <= n - len; i++) {
-                int j = i + len - 1;
-                
-                // Try removing each element in the range and merging its neighbors
-                for (int k = i; k <= j; k++) {
-                    int leftValue = (k > i) ? dp[i][k-1] : 0;
-                    int rightValue = (k < j) ? dp[k+1][j] : 0;
-                    int mergedValue = leftValue + rightValue;
-                    
-                    dp[i][j] = Math.max(dp[i][j], mergedValue);
-                }
-            }
-        }
-        
-        return dp[0][n-1];
+        return (sumEven == 0 && sumOdd == 0) ? mx : Math.max(sumEven, sumOdd);
     }
 
     public static void main(String[] args) {
-        Solution solution = new Solution();
-        
-        // Test cases
-        int[] arr1 = {1, 2, 3, 4, 5};
-        System.out.println("Test 1: " + solution.maxLastElement(arr1));  // Expected: 15
-        
-        int[] arr2 = {-1, 2, -3, 4, -5};
-        System.out.println("Test 2: " + solution.maxLastElement(arr2));  // Expected: 6
-        
-        int[] arr3 = {1, -2, 3, -4, 5};
-        System.out.println("Test 3: " + solution.maxLastElement(arr3));  // Expected: 7
+        System.out.println(solve(new int[]{-3, 1, 4, -1, 5, -9})); // 9
+        System.out.println(solve(new int[]{-2, 4, 3, -2, 1})); // 4
+        System.out.println(solve(new int[]{2, 5, -10, 5, 9})); // 11
     }
 }
+Last edited just now
