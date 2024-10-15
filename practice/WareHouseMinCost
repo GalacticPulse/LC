@@ -1,0 +1,43 @@
+import java.util.*;
+
+class Solution {
+    public static int balanceWarehouses(int[] warehouses) {
+        int n = warehouses.length;
+        int totalItems = Arrays.stream(warehouses).sum();
+        int targetItems = totalItems / n;
+
+        // Calculate prefix sums
+        int[] prefixSum = new int[n];
+        prefixSum[0] = warehouses[0] - targetItems;
+        for (int i = 1; i < n; i++) {
+            prefixSum[i] = prefixSum[i-1] + warehouses[i] - targetItems;
+        }
+
+        // Find the minimum and maximum prefix sums
+        int minSum = Arrays.stream(prefixSum).min().getAsInt();
+        int maxSum = Arrays.stream(prefixSum).max().getAsInt();
+
+        // Calculate costs for both directions
+        int clockwiseCost = calculateCost(prefixSum, minSum);
+        int anticlockwiseCost = calculateCost(prefixSum, maxSum);
+
+        // Return the minimum of the two costs
+        return Math.min(clockwiseCost, anticlockwiseCost);
+    }
+
+    private static int calculateCost(int[] prefixSum, int baseSum) {
+        int cost = 0;
+        for (int sum : prefixSum) {
+            cost += Math.abs(sum - baseSum);
+        }
+        return cost;
+    }
+
+    public static void main(String[] args) {
+        int[] warehouses1 = {6, 6, 6, 3, 4};
+        System.out.println("Minimum cost for [6, 6, 6, 3, 4]: " + balanceWarehouses(warehouses1));
+
+        int[] warehouses2 = {2, 8, 4, 6};
+        System.out.println("Minimum cost for [2, 8, 4, 6]: " + balanceWarehouses(warehouses2));
+    }
+}
