@@ -1,0 +1,56 @@
+public class LongestRegexMatch {
+    
+    // Function to find the longest match of regex in the text
+    public static int findLongestMatch(String text, String regex) {
+        // Split the regex into prefix and suffix based on '*'
+        String[] parts = regex.split("\\*");
+        String prefix = parts[0];
+        String suffix = parts[1];
+        
+        int textLen = text.length();
+        int prefixLen = prefix.length();
+        int suffixLen = suffix.length();
+        
+        // Arrays to store prefix match and suffix match positions
+        boolean[] prefixMatch = new boolean[textLen];
+        boolean[] suffixMatch = new boolean[textLen];
+        
+        // Check for prefix matches
+        for (int i = 0; i <= textLen - prefixLen; i++) {
+            if (text.substring(i, i + prefixLen).equals(prefix)) {
+                prefixMatch[i + prefixLen - 1] = true; // Mark end of prefix match
+            }
+        }
+        
+        // Check for suffix matches
+        for (int i = textLen - suffixLen; i >= 0; i--) {
+            if (text.substring(i, i + suffixLen).equals(suffix)) {
+                suffixMatch[i] = true; // Mark start of suffix match
+            }
+        }
+        
+        // Find the maximum substring length that satisfies the regex
+        int maxLength = -1;
+        for (int i = 0; i < textLen; i++) {
+            if (prefixMatch[i]) {  // If prefix matches at this position
+                for (int j = i + 1; j < textLen; j++) {
+                    if (suffixMatch[j]) {  // If suffix matches at this position
+                        maxLength = Math.max(maxLength, j - i + 1);
+                    }
+                }
+            }
+        }
+        
+        return maxLength;
+    }
+
+    public static void main(String[] args) {
+        // Example usage
+        String text = "hackerrank";
+        String regex = "ack*r";
+        
+        // Find and print the longest match length
+        int result = findLongestMatch(text, regex);
+        System.out.println("The longest match length is: " + result);
+    }
+}
