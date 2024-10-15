@@ -1,0 +1,68 @@
+public class SmartCanvas {
+
+    public static int minTimeToBeautifulCanvas(int n, int m, int k, int[][] paint) {
+        int[][] canvas = new int[n][m];
+        int[][] prefixSum = new int[n + 1][m + 1]; // Prefix sum array to count painted cells
+
+        // Process each paint operation
+        for (int minute = 0; minute < paint.length; minute++) {
+            int row = paint[minute][0];
+            int col = paint[minute][1];
+
+            // Mark the canvas as painted
+            canvas[row][col] = 1;
+
+            // Update prefix sum
+            updatePrefixSum(prefixSum, canvas, row, col);
+
+            // Now check if there's a fully painted k x k square
+            if (checkForBeautifulCanvas(prefixSum, k, n, m)) {
+                return minute + 1; // Return 1-based minute
+            }
+        }
+
+        // If no k x k square is fully painted, return -1
+        return -1;
+    }
+
+    // Update prefix sum matrix
+    private static void updatePrefixSum(int[][] prefixSum, int[][] canvas, int row, int col) {
+        // Update prefix sum for the painted cell
+        for (int i = row + 1; i < prefixSum.length; i++) {
+            for (int j = col + 1; j < prefixSum[0].length; j++) {
+                prefixSum[i][j] = canvas[i - 1][j - 1]
+                                + prefixSum[i - 1][j]
+                                + prefixSum[i][j - 1]
+                                - prefixSum[i - 1][j - 1];
+            }
+        }
+    }
+
+    // Check if there is any fully painted k x k square
+    private static boolean checkForBeautifulCanvas(int[][] prefixSum, int k, int n, int m) {
+        for (int i = k; i <= n; i++) {
+            for (int j = k; j <= m; j++) {
+                int paintedCellsInKxK = prefixSum[i][j]
+                        - prefixSum[i - k][j]
+                        - prefixSum[i][j - k]
+                        + prefixSum[i - k][j - k];
+
+                // If the sub-square has k*k painted cells, return true
+                if (paintedCellsInKxK == k * k) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        int n = 5, m = 5, k = 2;
+        int[][] paint = {
+            {0, 0}, {0, 1}, {1, 0}, {1, 1}, // After 4 minutes we have a 2x2 square
+            {2, 2}, {3, 3}
+        };
+
+        System.out.println(minTimeToBeautifulCanvas(n, m, k, paint)); // Expected output: 4
+    }
+}
