@@ -1,0 +1,15 @@
+public static int getMinimumOffBulbs(List<Integer> brightness) {
+        Collections.sort(brightness);
+        int runningSum = 0;
+        int offCount = 0;
+        
+        for (int b : brightness) {
+            if (runningSum > b) {
+                offCount++;
+            } else {
+                runningSum += b;
+            }
+        }
+        
+        return offCount;
+    }
