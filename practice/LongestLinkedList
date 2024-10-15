@@ -1,0 +1,85 @@
+class SinglyLinkedListNode {
+    int data;
+    SinglyLinkedListNode next;
+
+    SinglyLinkedListNode(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+public class LinkedList {
+    
+    public SinglyLinkedListNode locateLongestList(SinglyLinkedListNode head) {
+        if (head == null) return null; // If the list is empty
+
+        SinglyLinkedListNode start = head;
+        int currLen = 1, maxLen = 1;
+        int totalCount = 1, resIndex = 0;
+
+        // Traverse the linked list
+        for (SinglyLinkedListNode curr = head; curr.next != null; curr = curr.next) {
+            if (curr.data >= curr.next.data) {
+                currLen++;
+            } else {
+                // Update the max length and start index if necessary
+                if (maxLen < currLen) {
+                    maxLen = currLen;
+                    resIndex = totalCount - currLen;
+                }
+                currLen = 1; // Reset current length for the next segment
+            }
+            totalCount++;
+        }
+
+        // Check at the end of the list in case the longest segment is at the end
+        if (maxLen < currLen) {
+            maxLen = currLen;
+            resIndex = totalCount - maxLen;
+        }
+
+        // Reset the pointer to the head to find the start of the segment
+        SinglyLinkedListNode current = head;
+        int index = 0;
+
+        // Traverse again to get the starting point of the longest segment
+        while (current != null) {
+            if (index == resIndex) {
+                start = current; // Set start to the current node
+                // Now cut the list to only keep the longest segment
+                SinglyLinkedListNode temp = current;
+                while (maxLen > 0) {
+                    if (maxLen == 1) {
+                        temp.next = null; // Terminate the segment
+                    } else {
+                        temp = temp.next; // Move to the next node
+                    }
+                    maxLen--;
+                }
+                break; // Exit the loop once we've set the segment
+            }
+            index++;
+            current = current.next;
+        }
+        return start; // Return the start of the longest non-increasing segment
+    }
+
+    // Example usage
+    public static void main(String[] args) {
+        // Create a linked list: 4 -> 5 -> 4 -> 4 -> 3
+        SinglyLinkedListNode head = new SinglyLinkedListNode(4);
+        head.next = new SinglyLinkedListNode(5);
+        head.next.next = new SinglyLinkedListNode(4);
+        head.next.next.next = new SinglyLinkedListNode(4);
+        head.next.next.next.next = new SinglyLinkedListNode(3);
+        
+        LinkedList list = new LinkedList();
+        SinglyLinkedListNode result = list.locateLongestList(head);
+        
+        // Print the resulting segment
+        while (result != null) {
+            System.out.print(result.data + " ");
+            result = result.next;
+        }
+    }
+}
