@@ -1,0 +1,56 @@
+public static int suitableLocations(List<Integer> center, long d) {
+        Collections.sort(center);
+        int median = center.get(center.size() / 2);
+
+        if (!totalDistGood(center, median, d)) {
+            return 0;
+        }
+
+        int min = findMin(center, median, d);
+        int max = findMax(center, median, d);
+
+        return max - min + 1;
+    }
+
+    private static int findMax(List<Integer> center, int x, long d) {
+        int l = x;
+        int r = 1000000000;
+        int re = x;
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            if (totalDistGood(center, m, d)) {
+                re = m;
+                l = m + 1;
+            } else {
+                r = m - 1;
+            }
+        }
+        return re;
+    }
+
+    private static int findMin(List<Integer> center, int x, long d) {
+        int l = -1000000000;
+        int r = x;
+        int re = x;
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            if (totalDistGood(center, m, d)) {
+                re = m;
+                r = m - 1;
+            } else {
+                l = m + 1;
+            }
+        }
+        return re;
+    }
+
+    private static boolean totalDistGood(List<Integer> center, int x, long d) {
+        long totalDistance = 0;
+        for (int c : center) {
+            totalDistance += 2L * Math.abs(c - x);
+            if (totalDistance > d) {
+                return false;
+            }
+        }
+        return true;
+    }
