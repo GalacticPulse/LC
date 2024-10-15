@@ -1,0 +1,37 @@
+import java.util.HashMap;
+import java.util.Map;
+
+public class RateLimiting {
+
+    public static int getMinTime(int n, String requests, int minGap) {
+        // Count occurrences of each region
+        Map<Character, Integer> count = new HashMap<>();
+
+        // Count the occurrences of each character in requests
+        for (char ch : requests.toCharArray()) {
+            count.put(ch, count.getOrDefault(ch, 0) + 1);
+        }
+
+        int totalTime = 0;
+
+        // Calculate total time required for each region
+        for (int k : count.values()) {
+            int timeForRegion = k + (k - 1) * minGap;
+            totalTime = Math.max(totalTime, timeForRegion);
+        }
+
+        return totalTime;
+    }
+
+    public static void main(String[] args) {
+        int n1 = 6;
+        String requests1 = "aaabbb";
+        int minGap1 = 2;
+        System.out.println(getMinTime(n1, requests1, minGap1)); // Output: 8
+
+        int n2 = 12;
+        String requests2 = "abacadaeafag";
+        int minGap2 = 2;
+        System.out.println(getMinTime(n2, requests2, minGap2)); // Output: 16
+    }
+}
