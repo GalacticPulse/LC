@@ -1,0 +1,15 @@
+public static int minRemovals(int[] prices, int k, int threshold) {
+	Arrays.sort(prices);
+	int start= prices.length-1;
+            int sum=0;
+	int count=0;
+	for(int end=prices.length-1;end>=0;end—){
+		sum += prices[end];
+		while(sum > threshold){
+			sum -= prices[start—];
+			count++;
+		}
+		if(start-end+1==k) sum -= prices[start—];
+	}
+	return count;
+}
